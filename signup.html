@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Signup</title>
+    <style>
+        body { min-height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; background: #eef4f0; color: #172033; }
+        .box { width: min(420px, 90vw); background: white; border: 1px solid #d6dfd9; border-radius: 10px; padding: 24px; box-shadow: 0 14px 35px rgba(22, 43, 31, .12); }
+        h1 { margin: 0 0 16px; font-size: 24px; }
+        label { display: block; margin-top: 12px; font-weight: 700; font-size: 13px; }
+        input { width: 100%; box-sizing: border-box; margin-top: 6px; padding: 10px; border: 1px solid #bfcbbf; border-radius: 7px; font-size: 15px; }
+        button, a.button { display: inline-block; margin-top: 18px; padding: 10px 18px; border: 0; border-radius: 7px; background: #1f6b4a; color: white; font-weight: 700; text-decoration: none; cursor: pointer; }
+        a { color: #1f6b4a; }
+        .hint { color: #667; font-size: 13px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <form class="box" action="signup.php" method="POST">
+        <h1>Student Signup</h1>
+        <p class="hint">School se mila hua username aur temporary password enter karo, phir apna new password set karo.</p>
+
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="student01" required>
+
+        <label for="temporary_password">Temporary Password</label>
+        <input id="temporary_password" name="temporary_password" type="password" required>
+
+        <label for="new_password">New Password</label>
+        <input id="new_password" name="new_password" type="password" minlength="6" required>
+
+        <label for="confirm_password">Confirm New Password</label>
+        <input id="confirm_password" name="confirm_password" type="password" minlength="6" required>
+
+        <button type="submit">Create Account</button>
+        <p class="hint"><a href="login.html">Already signed up? Login</a></p>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustafvi Model School Login</title>
+    <style>
+        :root {
+            --green: #5fad47;
+            --green-dark: #2f6b32;
+            --cream: #f8f5ed;
+            --light-brown: #d8c5a4;
+            --brown: #8b7653;
+            --input-bg: #e8e8e5;
+            --text: #263628;
+            --muted: #7b7b72;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                linear-gradient(135deg, rgba(15, 38, 24, 0.30), rgba(255, 255, 255, 0.22)),
+                url("school login pic.jpg") center / cover no-repeat;
+            overflow: hidden;
+        }
+
+        .page {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            isolation: isolate;
+            padding: 24px;
+        }
+
+        .brand-panel {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 34px 5vw;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), transparent 42%);
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .brand-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.04);
+            z-index: 1;
+        }
+
+        .school-photo {
+            display: none;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .logo-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 0;
+            flex-wrap: nowrap;
+        }
+
+        .school-logo {
+            width: 118px;
+            height: 118px;
+            max-height: 118px;
+            border-radius: 0;
+            object-fit: contain;
+            background: var(--white);
+            border: 4px solid var(--white);
+            border-radius: 50%;
+            padding: 5px;
+            flex: 0 0 auto;
+            box-shadow: 0 10px 26px rgba(45, 79, 44, 0.18);
+        }
+
+        .school-name {
+            margin: 0;
+            font-size: 44px;
+            line-height: 1.14;
+            color: var(--white);
+            letter-spacing: 0;
+            white-space: nowrap;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.42);
+        }
+
+        .brand-title {
+            margin: 0 0 14px;
+            font-size: 34px;
+            line-height: 1.12;
+            color: var(--white);
+            letter-spacing: 0;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.42);
+        }
+
+        .brand-text {
+            max-width: 430px;
+            margin: 0;
+            color: var(--brown);
+            font-size: 17px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .login-panel {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: min(470px, 100%);
+            background: transparent;
+            transform: translateY(15px);
+        }
+
+        .login-card {
+            width: min(430px, 100%);
+            padding: 40px 44px 34px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            box-shadow: 0 24px 56px rgba(0, 0, 0, 0.26);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-heading {
+            margin: 0 0 24px;
+            color: var(--green-dark);
+            font-size: 25px;
+            letter-spacing: 0;
+        }
+
+        .field {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .field img {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            width: 15px;
+            height: 15px;
+            object-fit: contain;
+            transform: translateY(-50%);
+            opacity: 0.65;
+        }
+
+        .field input {
+            width: 100%;
+            height: 42px;
+            border: 0;
+            border-radius: 22px;
+            background: var(--input-bg);
+            color: var(--text);
+            padding: 0 18px 0 46px;
+            font-size: 14px;
+            outline: none;
+            transition: box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .field input:focus {
+            background: #f0f0ec;
+            box-shadow: 0 0 0 3px rgba(95, 173, 71, 0.2);
+        }
+
+        .field input::placeholder {
+            color: #8f8f88;
+        }
+
+        .signin {
+            width: 100%;
+            height: 42px;
+            margin-top: 14px;
+            border: 0;
+            border-radius: 22px;
+            background: var(--green);
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .signin:hover,
+        .signin:focus {
+            background: var(--green-dark);
+            box-shadow: 0 10px 20px rgba(47, 107, 50, 0.2);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .account-links {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .account-links a,
+        .signup-link {
+            border: 0;
+            padding: 0;
+            background: none;
+            color: var(--brown);
+            font: inherit;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .account-links a:hover,
+        .signup-link:hover {
+            color: var(--green-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 860px) {
+            .page {
+                align-items: center;
+            }
+
+            .brand-panel {
+                min-height: 0;
+                padding: 18px 20px;
+            }
+
+            .login-panel {
+                min-height: 0;
+                padding: 0;
+            }
+
+            .school-photo {
+                width: 100%;
+                height: calc(100% + 80px);
+                mask-image: linear-gradient(180deg, #000 0%, #000 70%, rgba(0, 0, 0, 0.55) 84%, transparent 100%);
+                -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 70%, rgba(0, 0, 0, 0.55) 84%, transparent 100%);
+            }
+
+            .brand-title {
+                font-size: 26px;
+            }
+
+            .school-name {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-panel {
+                padding: 18px 18px 28px;
+            }
+
+            .login-panel {
+                padding: 24px 18px 22px;
+            }
+
+            .login-card {
+                padding: 32px 22px 28px;
+            }
+
+            .logo-row {
+                gap: 12px;
+                margin-bottom: 0;
+            }
+
+            .school-logo {
+                width: 74px;
+                height: 74px;
+            }
+
+            .school-name {
+                font-size: clamp(20px, 6vw, 28px);
+                white-space: normal;
+            }
+
+            .brand-title {
+                font-size: 22px;
+            }
+
+            .brand-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="brand-panel">
+            <img class="school-photo" src="school login pic.jpg" alt="School building">
+            <div class="brand-content">
+                <div class="logo-row">
+                    <img class="school-logo" src="logo MCH.jpeg" alt="Mustafvi Model School logo">
+                    <h1 class="school-name">Mustafvi Model School</h1>
+                </div>
+            </div>
+        </section>
+
+        <section class="login-panel">
+            <form class="login-card" id="loginForm" action="login.php" method="POST" novalidate>
+                <h2 class="login-heading">Student Study Management</h2>
+
+                <div class="field">
+                    <img src="Email.png" alt="">
+                    <input type="text" name="username" id="username" placeholder="Username">
+                </div>
+
+                <div class="field">
+                    <img src="Lock.png" alt="">
+                    <input type="password" id="password" name="password" placeholder="Password">
+                </div>
+
+                <button class="signin" type="submit">LOGIN</button>
+
+                <div class="account-links">
+                    <a href="#">Forgot Username / Password?</a>
+                    <span>|</span>
+                    <button class="signup-link" type="button" id="signupButton">Sign Up</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const signupButton = document.getElementById('signupButton');
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get('error') === 'invalid') {
+            alert('Invalid username or password.');
+        } else if (params.get('error') === 'missing') {
+            alert('Username and password are required.');
+        } else if (params.get('error') === 'login_required') {
+            alert('Please login first.');
+        }
+
+        signupButton.addEventListener('click', function () {
+            window.location.href = 'signup.html';
+        });
+
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (username.value.trim() === '') {
+                alert('Username is required.');
+                return;
+            }
+
+            if (password.value.trim() === '') {
+                alert('Password is required.');
+                return;
+            }
+
+            if (password.value.length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+
+            loginForm.submit();
+        });
+    </script>
+</body>
+</html>

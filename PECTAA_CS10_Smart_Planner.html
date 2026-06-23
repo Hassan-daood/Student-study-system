@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS 10th PECTAA — Smart Study Planner 2025-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1a3a5c;
+  --accent: #e8a020;
+  --green: #2e7d5e;
+  --red: #c0392b;
+  --purple: #7b3f8a;
+  --teal: #1a7d8a;
+  --light-bg: #f0f4f9;
+  --white: #ffffff;
+  --border: #d0dce8;
+  --text: #1a2535;
+  --muted: #6b7e96;
+  --ch-colors: #1a3a5c, #2e7d5e, #7b3f8a, #1a7d8a, #c0392b, #c67c00, #1a3a8a, #8a3a1a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--light-bg); color: var(--text); font-size: 13px; }
+
+/* COVER */
+.cover {
+  background: linear-gradient(135deg, #ffffff 0%, #f4fbf7 20%, #1f6b4a 20%, #2e7d5e 100%);
+  color: #163d2c; padding: 32px 24px 28px; text-align: center; position: relative; overflow: hidden;
+}
+.cover::before { content:''; position:absolute; top:-54px; right:-48px; width:190px; height:190px; border-radius:50%; background:rgba(255,255,255,.28); border:24px solid rgba(31,107,74,.16); }
+.cover::after  { content:''; position:absolute; bottom:-48px; left:-40px; width:150px; height:150px; border-radius:50%; background:rgba(248,241,220,.34); border:18px solid rgba(31,107,74,.18); }
+.cover-logo { position:relative; z-index:1; width:104px; height:auto; max-height:104px; object-fit:contain; background:transparent; border:0; border-radius:0; padding:0; margin:0 auto 12px; display:block; box-shadow:none; }
+.cover-school { position:relative; z-index:1; font-size:26px; font-weight:800; line-height:1.15; margin-bottom:8px; color:#ffffff; text-transform:uppercase; letter-spacing:.8px; text-shadow:0 2px 8px rgba(0,0,0,.34); }
+.cover h1 { position:relative; z-index:1; font-size:24px; font-weight:800; line-height:1.2; margin-bottom:4px; color:#ffffff; text-shadow:0 2px 8px rgba(0,0,0,.34); }
+.cover h1 span { color:#f8f1dc; }
+
+/* PROGRESS */
+.progress-section { background:white; padding:16px 20px; border-bottom:1px solid var(--border); }
+.prog-title { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+.overall-bar-wrap { background:var(--light-bg); border-radius:8px; height:12px; overflow:hidden; margin-bottom:6px; }
+.overall-bar { height:100%; background:linear-gradient(90deg, var(--green), var(--accent)); border-radius:8px; transition:width .5s ease; width:0%; }
+.prog-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:12px; }
+.prog-meta strong { color:var(--text); font-size:13px; }
+.ch-pills { display:flex; flex-wrap:wrap; gap:6px; }
+.ch-pill { border-radius:20px; padding:3px 10px; font-size:10px; font-weight:700; border:2px solid; display:flex; align-items:center; gap:4px; }
+.pill-dot { width:6px; height:6px; border-radius:50%; }
+
+/* TABS */
+.tabs { display:flex; overflow-x:auto; background:white; border-bottom:2px solid var(--border); padding:0 12px; gap:2px; scrollbar-width:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tab { flex-shrink:0; padding:10px 13px; font-size:11px; font-weight:700; color:var(--muted); cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; }
+.tab:hover { color:var(--primary); }
+.tab.active { color:var(--primary); border-bottom-color:var(--accent); }
+
+/* PANELS */
+.panel { display:none; padding:16px 14px; }
+.panel.active { display:block; }
+.panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.panel-title { font-size:18px; font-weight:800; color:var(--primary); }
+.panel-range { font-size:11px; color:var(--muted); font-weight:500; }
+.mprog-badge { background:var(--light-bg); border:1px solid var(--border); border-radius:20px; padding:3px 10px; font-size:11px; font-weight:700; color:var(--muted); }
+
+/* TEST ALERT */
+.test-banner { border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:12px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.test-banner.weekly { background:#fff8e1; border:1px solid #f0c030; color:#7a5500; }
+.test-banner.monthly { background:#fce4ec; border:1px solid #e91e63; color:#880033; }
+.test-banner.revision { background:#e8f5e9; border:1px solid #4caf50; color:#1b5e20; }
+
+/* CHAPTER CARD */
+.chapter-card { border-radius:10px; overflow:hidden; margin-bottom:14px; border:1.5px solid var(--border); background:white; }
+.chapter-header { padding:12px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; }
+.ch-num { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:white; flex-shrink:0; }
+.ch-info { flex:1; min-width:0; }
+.ch-name { font-size:12px; font-weight:700; line-height:1.3; }
+.ch-prog-row { display:flex; align-items:center; gap:6px; margin-top:3px; }
+.ch-mini-bar { flex:1; height:4px; border-radius:4px; background:var(--light-bg); overflow:hidden; }
+.ch-mini-fill { height:100%; border-radius:4px; transition:width .4s; width:0%; }
+.ch-count { font-size:9px; color:var(--muted); white-space:nowrap; }
+.ch-arrow { font-size:11px; color:var(--muted); transition:transform .2s; flex-shrink:0; }
+.chapter-card.open .ch-arrow { transform:rotate(180deg); }
+.topics-wrap { display:none; }
+.chapter-card.open .topics-wrap { display:block; }
+
+/* TABLE */
+.tbl { width:100%; border-collapse:collapse; font-size:11px; }
+.tbl thead tr { background:var(--light-bg); border-top:1px solid var(--border); }
+.tbl th { padding:7px 8px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); text-align:left; }
+.tbl th.c { text-align:center; }
+.tbl td { padding:7px 8px; border-top:1px solid #eef2f7; vertical-align:middle; }
+.tbl tr:hover td { background:#f9fbff; }
+.tbl tr.done-row td { background:#e8f8f0; }
+.t-num { font-size:9px; font-weight:700; color:var(--muted); white-space:nowrap; }
+.t-name { font-size:11px; font-weight:500; line-height:1.4; }
+.t-name.done { text-decoration:line-through; color:var(--muted); }
+
+/* CHECKBOXES */
+.cb-cell { text-align:center; }
+.cb-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.cb-label { font-size:8px; font-weight:700; color:var(--muted); text-align:center; line-height:1.1; max-width:44px; }
+.cb-box { width:20px; height:20px; border:2px solid var(--border); border-radius:4px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all .18s; background:white; font-size:11px; flex-shrink:0; }
+.cb-box:hover { border-color:#888; }
+.cb-box.ticked-done { background:var(--green); border-color:var(--green); color:white; }
+.cb-box.ticked-und { background:#1a6eb5; border-color:#1a6eb5; color:white; }
+.cb-box.ticked-asgn { background:#7b3f8a; border-color:#7b3f8a; color:white; }
+.cb-box.ticked-test { background:#c67c00; border-color:#c67c00; color:white; }
+
+/* INPUTS */
+.date-in { border:1px solid var(--border); border-radius:5px; padding:3px 5px; font-family:'Tajawal',sans-serif; font-size:10px; color:var(--text); width:96px; background:white; outline:none; text-align:center; }
+.date-in:focus { border-color:var(--accent); }
+.date-in.filled { background:#fffbf0; border-color:var(--accent); }
+.sign-in { border:1px solid var(--border); border-radius:5px; padding:3px 5px; font-family:'Tajawal',sans-serif; font-size:10px; color:var(--text); width:60px; background:white; outline:none; text-align:center; }
+.sign-in:focus { border-color:var(--primary); }
+.sign-in.signed { background:#f0f4ff; border-color:var(--primary); }
+
+/* TEST ROW */
+.test-row td { background:#fff3e0 !important; border-top:2px dashed #f0a030 !important; }
+.test-row.monthly-test-row td { background:#fce4ec !important; border-top:2px dashed #e91e63 !important; }
+.test-icon { font-size:14px; }
+
+/* PRINT BUTTON */
+.print-btn { display:block; margin:0 14px 16px; background:var(--primary); color:white; border:none; border-radius:9px; padding:12px; font-family:'Tajawal',sans-serif; font-size:13px; font-weight:700; cursor:pointer; text-align:center; transition:background .2s; width:calc(100% - 28px); }
+.print-btn:hover { background:#122d47; }
+
+@media print {
+  .tabs, .print-btn { display:none !important; }
+  .panel { display:block !important; }
+  .topics-wrap { display:block !important; }
+  .chapter-card { break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <img class="cover-logo" src="logo MCH.jpeg" alt="Mustafvi Model School Logo">
+  <div class="cover-school">Mustafvi Model School</div>
+  <h1>Computer Science <span>10th Class</span><br>Smart Study Planner</h1>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="prog-title">Overall Progress</div>
+  <div class="overall-bar-wrap"><div class="overall-bar" id="overall-bar"></div></div>
+  <div class="prog-meta">
+    <span>✅ Done: <strong id="done-count">0</strong></span>
+    <span>📖 Remaining: <strong id="rem-count">0</strong></span>
+    <span><strong id="pct-count">0%</strong></span>
+  </div>
+  <div class="ch-pills" id="ch-pills"></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" id="tabs-bar"></div>
+<div id="panels-container"></div>
+<button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+<script>
+// ===== BOOK DATA (PECTAA 2026) =====
+const CHAPTERS = [
+  {
+    id:1, color:"#1a3a5c",
+    name:"Unit 1: Operating Systems: Structure and Services",
+    topics:[
+      "Introduction to Operating Systems",
+      "OS as Interface between User and Hardware",
+      "Managing Multiple User Accounts",
+      "Kernel and Shell – Definitions and Functions",
+      "OS Layers and their Interaction",
+      "System Libraries and Device Drivers",
+      "Process Lifecycle: Creation, Execution, Termination",
+      "First-Come First-Served (FCFS) Process Scheduling",
+      "Multitasking and Concurrency",
+      "Primary Memory (RAM) vs Virtual Memory",
+      "Processes and Threads",
+      "Multithreading and Performance",
+      "System Calls – Purpose and Types",
+      "File Systems, Files, Folders and Metadata",
+    ]
+  },
+  {
+    id:2, color:"#2e7d5e",
+    name:"Unit 2: Computer Maintenance and Troubleshooting",
+    topics:[
+      "Introduction to Post-Troubleshooting Maintenance",
+      "Importance of Continuous Maintenance",
+      "Impact of Poor Maintenance",
+      "Using Task Manager and Resource Monitor",
+      "Safe Mode and System Restore",
+      "BIOS and UEFI in System Startup",
+      "Bootable USB and Data Recovery",
+      "Disk Cleanup and Disk Defragmentation",
+      "Antivirus and Windows Defender",
+      "Windows Updates",
+      "File History and Backup",
+      "Preventive Maintenance Tasks",
+      "Keeping a Maintenance Calendar",
+      "System Documentation and Logs",
+    ]
+  },
+  {
+    id:3, color:"#7b3f8a",
+    name:"Unit 3: Introduction to Python Programming",
+    topics:[
+      "Introduction to Python Programming",
+      "Basic Programming Concepts",
+      "Setting Up Python Development Environment",
+      "Python Syntax and Structure",
+      "Variables and Data Types (int, float, str, bool)",
+      "Input and Output: input() and print()",
+      "Arithmetic Operators and Expressions",
+      "Comparison and Logical Operators",
+      "Assignment Operators",
+      "Operator Precedence",
+      "Comments in Python",
+      "Type Conversion (int(), float(), str())",
+    ]
+  },
+  {
+    id:4, color:"#1a7d8a",
+    name:"Unit 4: Control Structures in Python",
+    topics:[
+      "Introduction to Control Structures",
+      "Decision Making: if Statement",
+      "if-else Statement",
+      "if-elif-else Ladder",
+      "Nested if Statements",
+      "Looping: while Loop",
+      "for Loop and range()",
+      "Nested Loops",
+      "break and continue Statements",
+      "Python Lists – Declaration and Access",
+      "List Operations and Methods",
+      "Python Functions – Definition and Call",
+      "Function Parameters and Return Values",
+      "Python Modules and Libraries",
+      "Exception Handling – try/except",
+      "File Operations in Python",
+      "Testing and Debugging Techniques",
+    ]
+  },
+  {
+    id:5, color:"#c0392b",
+    name:"Unit 5: Introduction to Data Science",
+    topics:[
+      "What is Data Science?",
+      "Data Science Life Cycle (DSLC)",
+      "Identifying Real-World Problems with Data",
+      "Collecting Data: Surveys and Online Forms",
+      "Data Cleaning and Validation",
+      "Introduction to Spreadsheets (Excel/Google Sheets)",
+      "SQL Queries: SELECT and INSERT",
+      "Storing Data in Databases",
+      "Data Analysis: Sorting, Classification, Clustering",
+      "Creating Bar Charts and Dashboards",
+      "Communicating Results with Charts",
+      "Databases and Storing Data",
+      "What is a Database? Tables, Records, Fields",
+    ]
+  },
+  {
+    id:6, color:"#c67c00",
+    name:"Unit 6: Introduction to AI and Machine Learning",
+    topics:[
+      "What is Artificial Intelligence (AI)?",
+      "Difference between AI and Machine Learning",
+      "Supervised Learning",
+      "Unsupervised Learning",
+      "Algorithms in ML and Selection Criteria",
+      "Linear Regression (Introduction)",
+      "Model Performance Metrics and Accuracy",
+      "AI in Daily Life, Business, and Education",
+      "Bias, Privacy, and Responsibility in AI",
+    ]
+  },
+  {
+    id:7, color:"#1a3a8a",
+    name:"Unit 7: Applications of AI",
+    topics:[
+      "Natural Language Processing (NLP)",
+      "Chatbots and Text Analysis Tools",
+      "Speech Recognition Technology",
+      "Recommendation Systems",
+      "Autonomous Vehicles (Self-Driving Cars)",
+      "Robotics Applications",
+      "Social Injustice and Ethical Issues in AI",
+      "Fairness, Privacy, and Transparency in AI",
+      "AI Limitations and Areas of Improvement",
+    ]
+  },
+  {
+    id:8, color:"#8a3a1a",
+    name:"Unit 8: Digital Entrepreneurship",
+    topics:[
+      "Legal Compliance in Digital Business",
+      "Data Privacy Laws (GDPR, COPPA, Pakistan DPB)",
+      "Ethical Decision-Making in Business",
+      "Conflict of Interest Management",
+      "Responsible Marketing and Advertising",
+      "Root Cause Analysis and SWOT Analysis",
+      "Data-Driven Marketing: KPIs and ROI",
+      "Customer Relationship Management (CRM)",
+      "Marketing Automation Tools",
+    ]
+  }
+];
+
+// Schedule: start from current month (May 2026), 7 months content + 1 revision
+// May 2026 → Unit 1, Jun → Unit 2, Jul → Unit 3, Aug → Units 4, Sep → Unit 5, Oct → Unit 6, Nov → Units 7+8, Dec → Revision
+const MONTHS = [
+  { key:"m1", label:"May 2026",    range:"May 2026",  units:[1], revision:false },
+  { key:"m2", label:"June 2026",   range:"June 2026", units:[2], revision:false },
+  { key:"m3", label:"July 2026", range:"July 2026", units:[3], revision:false },
+  { key:"m4", label:"Aug 2026",   range:"Aug 2026",  units:[4], revision:false },
+  { key:"m5", label:"Sep 2026",  range:"Sep 2026",  units:[5], revision:false },
+  { key:"m6", label:"Oct 2026", range:"Oct 2026",  units:[6], revision:false },
+  { key:"m7", label:"Nov 2026",  range:"Nov 2026",  units:[7,8], revision:false },
+  { key:"m8", label:"Dec 2026",  range:"Dec 2026",  units:[1,2,3,4,5,6,7,8], revision:true },
+  { key:"all", label:"📋 All", range:"", units:[1,2,3,4,5,6,7,8], revision:false },
+];
+
+// Sunday dates per month (approximate) for weekly tests
+const SUNDAYS = {
+  m1:["May 4","May 11","May 18","May 25"],
+  m2:["Jun 1","Jun 8","Jun 15","Jun 22","Jun 29"],
+  m3:["Jul 6","Jul 13","Jul 20","Jul 27"],
+  m4:["Aug 3","Aug 10","Aug 17","Aug 24","Aug 31"],
+  m5:["Sep 7","Sep 14","Sep 21","Sep 28"],
+  m6:["Oct 5","Oct 12","Oct 19","Oct 26"],
+  m7:["Nov 2","Nov 9","Nov 16","Nov 23","Nov 30"],
+  m8:["Dec 7","Dec 14","Dec 21","Dec 28"],
+};
+
+// ===== STATE =====
+let state = {};
+function topicKey(chId, tIdx, type) { return `ch${chId}_t${tIdx}_${type}`; }
+function getState(k) { return state[k] || false; }
+
+// ===== BUILD UI =====
+function buildUI() {
+  const tabsBar = document.getElementById('tabs-bar');
+  const container = document.getElementById('panels-container');
+  tabsBar.innerHTML = '';
+  container.innerHTML = '';
+
+  MONTHS.forEach((m, mi) => {
+    // TAB
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (mi===0?' active':'');
+    tab.textContent = m.key==='all' ? '📋 All' : m.label.split('/')[0].trim();
+    tab.onclick = () => switchTab(m.key);
+    tab.dataset.key = m.key;
+    tabsBar.appendChild(tab);
+
+    // PANEL
+    const panel = document.createElement('div');
+    panel.className = 'panel' + (mi===0?' active':'');
+    panel.id = 'panel-'+m.key;
+
+    let html = `<div class="panel-header">
+      <div>
+        <div class="panel-title">${m.label}</div>
+        ${m.range?`<div class="panel-range">📅 ${m.range}</div>`:''}
+      </div>
+      <div class="mprog-badge" id="mprog-${m.key}">0%</div>
+    </div>`;
+
+    if (m.revision) {
+      html += `<div class="test-banner revision">📚 Revision Month — Revise all chapters completely. Focus on past papers and practice tests.</div>`;
+    }
+
+    // Weekly tests for this month
+    if (SUNDAYS[m.key]) {
+      html += `<div class="test-banner weekly">📝 Weekly Tests (Every Sunday): ` + SUNDAYS[m.key].join(' • ') + `</div>`;
+    }
+
+    // Monthly test
+    if (!m.revision && m.key !== 'all') {
+      html += `<div class="test-banner monthly">📊 Monthly Test: Last week of ${m.range || 'month'} — Topics covered this month</div>`;
+    }
+
+    // Chapters
+    m.units.forEach(uid => {
+      const ch = CHAPTERS.find(c=>c.id===uid);
+      if (ch) html += buildChapterCard(ch, m.key);
+    });
+
+    panel.innerHTML = html;
+    container.appendChild(panel);
+  });
+}
+
+function buildChapterCard(ch, mKey) {
+  const total = ch.topics.length;
+  const done  = ch.topics.filter((_,i) => getState(topicKey(ch.id,i,'done'))).length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+  const cardId = `card-${ch.id}-${mKey}`;
+
+  return `<div class="chapter-card" id="${cardId}">
+    <div class="chapter-header" onclick="toggleCard('${cardId}')">
+      <div class="ch-num" style="background:${ch.color}">${ch.id}</div>
+      <div class="ch-info">
+        <div class="ch-name">${ch.name}</div>
+        <div class="ch-prog-row">
+          <div class="ch-mini-bar"><div class="ch-mini-fill" style="background:${ch.color};width:${pct}%"></div></div>
+          <span class="ch-count">${done}/${total} (${pct}%)</span>
+        </div>
+      </div>
+      <div class="ch-arrow">▼</div>
+    </div>
+    <div class="topics-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:26px">#</th>
+            <th>Topic Name</th>
+            <th class="c" style="width:54px">Understood</th>
+            <th class="c" style="width:74px">Assignment/<br>Notes</th>
+            <th class="c" style="width:50px">Tests</th>
+            <th style="width:100px">Date</th>
+            <th style="width:64px">Teacher<br>Sign</th>
+            <th class="c" style="width:50px">✓ Done</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ch.topics.map((t, i) => {
+            const kd = topicKey(ch.id,i,'done');
+            const ku = topicKey(ch.id,i,'und');
+            const ka = topicKey(ch.id,i,'asgn');
+            const kt = topicKey(ch.id,i,'test');
+            const kdate = topicKey(ch.id,i,'date');
+            const ksign = topicKey(ch.id,i,'sign');
+            const isDone = getState(kd);
+            return `<tr class="${isDone?'done-row':''}" id="row-${kd}">
+              <td class="t-num">${ch.id}.${i+1}</td>
+              <td class="t-name ${isDone?'done':''}" id="tn-${kd}">${t}</td>
+              <td class="cb-cell">
+                <div class="cb-wrap">
+                  <div class="cb-box ${getState(ku)?'ticked-und':''}" id="cb-${ku}"
+                    onclick="event.stopPropagation();toggleCB('${ku}','und')">
+                    ${getState(ku)?'✓':''}
+                  </div>
+                </div>
+              </td>
+              <td class="cb-cell">
+                <div class="cb-wrap">
+                  <div class="cb-box ${getState(ka)?'ticked-asgn':''}" id="cb-${ka}"
+                    onclick="event.stopPropagation();toggleCB('${ka}','asgn')">
+                    ${getState(ka)?'✓':''}
+                  </div>
+                </div>
+              </td>
+              <td class="cb-cell">
+                <div class="cb-wrap">
+                  <div class="cb-box ${getState(kt)?'ticked-test':''}" id="cb-${kt}"
+                    onclick="event.stopPropagation();toggleCB('${kt}','test')">
+                    ${getState(kt)?'✓':''}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <input type="text" class="date-in ${state[kdate]?'filled':''}" id="di-${kd}"
+                  value="${state[kdate]||''}"
+                  placeholder="//"
+                  onclick="event.stopPropagation()"
+                  oninput="event.stopPropagation();saveField('${kdate}',this.value,this)">
+              </td>
+              <td>
+                <input type="text" class="sign-in ${state[ksign]?'signed':''}" id="si-${kd}"
+                  value="${state[ksign]||''}" placeholder="____"
+                  onclick="event.stopPropagation()"
+                  oninput="event.stopPropagation();saveField('${ksign}',this.value,this)">
+              </td>
+              <td class="cb-cell">
+                <div class="cb-wrap">
+                  <div class="cb-box ${getState(kd)?'ticked-done':''}" id="cb-${kd}"
+                    onclick="event.stopPropagation();toggleCB('${kd}','done')">
+                    ${getState(kd)?'✓':''}
+                  </div>
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ===== INTERACTIONS =====
+function toggleCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) card.classList.toggle('open');
+}
+
+function toggleCB(k, type) {
+  state[k] = !state[k];
+
+  // Update all matching elements (same topic may appear in multiple panels)
+  document.querySelectorAll(`[id="cb-${k}"]`).forEach(el => {
+    const cls = type==='done' ? 'ticked-done' : type==='und' ? 'ticked-und' : type==='test' ? 'ticked-test' : 'ticked-asgn';
+    el.classList.toggle(cls, state[k]);
+    el.textContent = state[k] ? '✓' : '';
+  });
+
+  if (type === 'done') {
+    // Update topic name strikethrough and row color
+    const baseKey = k.replace('_done','');
+    document.querySelectorAll(`[id="tn-${k}"]`).forEach(el => el.classList.toggle('done', state[k]));
+    document.querySelectorAll(`[id="row-${k}"]`).forEach(el => el.classList.toggle('done-row', state[k]));
+
+    // Auto-fill date
+    const kdate = k.replace('_done','_date');
+    if (state[k] && !state[kdate]) {
+      const today = new Date().toISOString().split('T')[0];
+      state[kdate] = today;
+      document.querySelectorAll(`[id="di-${k}"]`).forEach(el => {
+        el.value = today; el.classList.add('filled');
+      });
+    }
+  }
+
+  updateProgress();
+  saveToStorage();
+}
+
+function saveField(k, val, el) {
+  state[k] = val;
+  const isFilled = !!val;
+  if (el && k.includes('_date')) { document.querySelectorAll(`[id="${el.id}"]`).forEach(e => e.classList.toggle('filled', isFilled)); }
+  if (el && k.includes('_sign')) { document.querySelectorAll(`[id="${el.id}"]`).forEach(e => e.classList.toggle('signed', isFilled)); }
+  saveToStorage();
+}
+
+function switchTab(key) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.key===key));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id==='panel-'+key));
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  let total=0, done=0;
+  CHAPTERS.forEach(ch => {
+    total += ch.topics.length;
+    done  += ch.topics.filter((_,i) => getState(topicKey(ch.id,i,'done'))).length;
+  });
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('overall-bar').style.width = pct+'%';
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('rem-count').textContent = total-done;
+  document.getElementById('pct-count').textContent = pct+'%';
+
+  // Pills
+  const pillsEl = document.getElementById('ch-pills');
+  pillsEl.innerHTML = CHAPTERS.map(ch => {
+    const t = ch.topics.length;
+    const d = ch.topics.filter((_,i) => getState(topicKey(ch.id,i,'done'))).length;
+    return `<div class="ch-pill" style="border-color:${ch.color};color:${ch.color}">
+      <div class="pill-dot" style="background:${ch.color}"></div>
+      U${ch.id}: ${d}/${t}
+    </div>`;
+  }).join('');
+
+  // Month badges + chapter bars
+  MONTHS.forEach(m => {
+    let mt=0, md=0;
+    m.units.forEach(uid => {
+      const ch = CHAPTERS.find(c=>c.id===uid);
+      if (!ch) return;
+      mt += ch.topics.length;
+      md += ch.topics.filter((_,i) => getState(topicKey(ch.id,i,'done'))).length;
+    });
+    const el = document.getElementById('mprog-'+m.key);
+    if (el) el.textContent = mt ? Math.round(md/mt*100)+'%' : '0%';
+  });
+
+  // Chapter mini bars
+  CHAPTERS.forEach(ch => {
+    const t = ch.topics.length;
+    const d = ch.topics.filter((_,i) => getState(topicKey(ch.id,i,'done'))).length;
+    const p = t ? Math.round(d/t*100) : 0;
+    document.querySelectorAll(`[id^="card-${ch.id}-"] .ch-mini-fill`).forEach(el => el.style.width=p+'%');
+    document.querySelectorAll(`[id^="card-${ch.id}-"] .ch-count`).forEach(el => el.textContent=`${d}/${t} (${p}%)`);
+  });
+}
+
+// ===== STORAGE =====
+const STORAGE_USER = (window.PECTAA_CURRENT_USER || 'guest').replace(/[^a-z0-9_-]/gi, '_');
+const STORAGE_KEY = `pectaa_cs10_2026_${STORAGE_USER}`;
+let saveTimer = null;
+
+function saveToStorage() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToDatabase, 450);
+}
+
+function saveToDatabase() {
+  if (!window.PECTAA_CURRENT_USER) return;
+  fetch('planner_api.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({state})
+  }).catch(() => {});
+}
+
+function loadFromStorage() {
+  if (window.PECTAA_INITIAL_STATE && Object.keys(window.PECTAA_INITIAL_STATE).length) {
+    state = window.PECTAA_INITIAL_STATE;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+    return;
+  }
+  try { const s = localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){}
+}
+
+// ===== INIT =====
+loadFromStorage();
+buildUI();
+updateProgress();
+</script>
+</body>
+</html>
